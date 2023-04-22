@@ -1,6 +1,7 @@
 package com.unkownkoder.services.abstracts;
 
 import com.unkownkoder.dto.CreateTodoListRequest;
+import com.unkownkoder.dto.UpdateTodoListRequest;
 
 public interface TodoListService {
 
@@ -8,5 +9,7 @@ public interface TodoListService {
 
     void delete(int id);
 
+
+    void update(UpdateTodoListRequest updateTodoListRequest);
 
 }

@@ -3,6 +3,7 @@ package com.unkownkoder.services.concretes;
 import com.unkownkoder.dto.CreateTodoItemRequest;
 import com.unkownkoder.dto.GetAllTodoListAndItemsResponse;
 import com.unkownkoder.dto.GetUserTodoListAndItemsResponse;
+import com.unkownkoder.dto.UpdateTodoItemRequest;
 import com.unkownkoder.entity.TodoItem;
 import com.unkownkoder.entity.TodoList;
 import com.unkownkoder.entity.User;
@@ -79,6 +80,20 @@ public class TodoItemManager implements TodoItemService {
 
         todoItemRepository.deleteById(id);
 
+    }
+
+    @Override
+    public void update(UpdateTodoItemRequest updateTodoItemRequest) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+
+        TodoItem todoItem = todoItemRepository.findById(updateTodoItemRequest.getId()).orElseThrow();
+        var todoList = todoItem.getTodoList();
+        todoItem = modelMapperService.forRequest().map(updateTodoItemRequest,TodoItem.class);
+        todoItem.setTodoList(todoList);
+
+        todoItemRepository.save(todoItem);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.unkownkoder.services.concretes;
 
 import com.unkownkoder.dto.CreateTodoListRequest;
+import com.unkownkoder.dto.UpdateTodoListRequest;
 import com.unkownkoder.entity.TodoList;
 import com.unkownkoder.entity.User;
 import com.unkownkoder.repository.TodoItemRepository;
@@ -46,6 +47,40 @@ public class TodoListManager implements TodoListService {
     public void delete(int id) {
 
         todoListRepository.deleteById(id);
+
+    }
+
+    @Override
+    public void update(UpdateTodoListRequest updateTodoListRequest) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+
+        boolean isValidId = false;
+
+        for (TodoList todoList:user.getTodoLists()) {
+
+            if(todoList.getId() == updateTodoListRequest.getId()){
+                isValidId = true;
+                break;
+            }
+
+        }
+
+        if(!isValidId){
+            throw new RuntimeException("Given todolist id does not belong to you.");
+        }
+
+        else{
+
+            TodoList todoList = modelMapperService.forRequest().map(updateTodoListRequest,TodoList.class);
+
+            todoList.setUser(user);
+
+            todoListRepository.save(todoList);
+
+
+        }
 
     }
 }

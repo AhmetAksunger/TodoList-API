@@ -1,9 +1,6 @@
 package com.unkownkoder.controllers;
 
-import com.unkownkoder.dto.CreateTodoItemRequest;
-import com.unkownkoder.dto.CreateTodoListRequest;
-import com.unkownkoder.dto.GetUserTodoListAndItemsResponse;
-import com.unkownkoder.dto.ProfileResponse;
+import com.unkownkoder.dto.*;
 import com.unkownkoder.services.UserService;
 import com.unkownkoder.services.abstracts.TodoItemService;
 import com.unkownkoder.services.abstracts.TodoListService;
@@ -71,6 +68,22 @@ public class UserController {
         todoItemService.delete(id);
 
         return ResponseEntity.ok("Deleted successfully");
+    }
+
+
+    @PutMapping("/update/todolist")
+    public ResponseEntity<UpdateTodoListRequest> updateTodoList(@Validated @RequestBody UpdateTodoListRequest updateTodoListRequest){
+
+        todoListService.update(updateTodoListRequest);
+
+        return ResponseEntity.ok(updateTodoListRequest);
+    }
+
+    @PutMapping("/update/todoitem")
+    public ResponseEntity<UpdateTodoItemRequest> updateTodoItem(@Validated @RequestBody UpdateTodoItemRequest updateTodoItemRequest){
+
+        todoItemService.update(updateTodoItemRequest);
+        return ResponseEntity.ok(updateTodoItemRequest);
     }
 
     @GetMapping("/get/todolistsanditems")
