@@ -10,6 +10,8 @@ import com.unkownkoder.entity.User;
 import com.unkownkoder.repository.TodoItemRepository;
 import com.unkownkoder.repository.UserRepository;
 import com.unkownkoder.services.abstracts.TodoItemService;
+import com.unkownkoder.utils.exceptions.TodoItemNotFoundException;
+import com.unkownkoder.utils.exceptions.TodoListNotFoundException;
 import com.unkownkoder.utils.mappers.ModelMapperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,7 +48,7 @@ public class TodoItemManager implements TodoItemService {
         }
 
         if(!todoListExists){
-            throw new RuntimeException("TodoList does not exist for the given user");
+            throw new TodoListNotFoundException();
         }
 
         TodoItem todoItem = modelMapperService.forRequest().map(createTodoItemRequest,TodoItem.class);
@@ -62,6 +64,18 @@ public class TodoItemManager implements TodoItemService {
 
         User user = userRepository.findByUsername(username).orElseThrow();
 
+        TodoItem todoItem = todoItemRepository.findById(id).orElseThrow(() -> new TodoItemNotFoundException("No such a todo item with the given id"));
+
+        TodoList todoList = todoItem.getTodoList();
+
+        if(!todoList.getUser().equals(user)){
+            throw new TodoListNotFoundException();
+        }
+
+        todoItemRepository.deleteById(id);
+
+
+/*
         boolean isValidId = false;
 
         for (TodoItem todoItem: todoItemRepository.findAllByTodoListInOrderByTodoListName(user.getTodoLists())) {
@@ -75,11 +89,11 @@ public class TodoItemManager implements TodoItemService {
         }
 
         if(!isValidId){
-            throw new RuntimeException("There is no such a todo list with given id that belongs to you");
+            throw new TodoListNotFoundException();
         }
 
         todoItemRepository.deleteById(id);
-
+*/
     }
 
     @Override
@@ -88,10 +102,16 @@ public class TodoItemManager implements TodoItemService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username).orElseThrow();
 
-        TodoItem todoItem = todoItemRepository.findById(updateTodoItemRequest.getId()).orElseThrow();
-        var todoList = todoItem.getTodoList();
+        TodoItem todoItem = todoItemRepository.findById(updateTodoItemRequest.getId()).orElseThrow(() -> new TodoItemNotFoundException("No such a todo item with the given id"));
+        TodoList todoList = todoItem.getTodoList();
+
+        if(!todoList.getUser().equals(user)){
+            throw new TodoItemNotFoundException();
+        }
+
         todoItem = modelMapperService.forRequest().map(updateTodoItemRequest,TodoItem.class);
         todoItem.setTodoList(todoList);
+
 
         todoItemRepository.save(todoItem);
     }

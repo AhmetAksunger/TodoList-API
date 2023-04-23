@@ -98,4 +98,11 @@ public class UserController {
         return ResponseEntity.ok(todoListService.getAllUserTodoLists());
     }
 
+    @PutMapping("/profile/update")
+    public ResponseEntity<UpdateUserRequest> updateUser(@Validated @RequestBody UpdateUserRequest updateUserRequest){
+
+        userService.updateUser(updateUserRequest);
+
+        return ResponseEntity.ok(updateUserRequest);
+    }
 }

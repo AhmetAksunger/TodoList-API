@@ -10,6 +10,7 @@ import com.unkownkoder.repository.TodoListRepository;
 import com.unkownkoder.repository.UserRepository;
 import com.unkownkoder.services.UserService;
 import com.unkownkoder.services.abstracts.TodoListService;
+import com.unkownkoder.utils.exceptions.TodoListNotFoundException;
 import com.unkownkoder.utils.mappers.ModelMapperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,6 +51,15 @@ public class TodoListManager implements TodoListService {
     @Override
     public void delete(int id) {
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+
+        TodoList todoList = todoListRepository.findById(id).orElseThrow(() -> new TodoListNotFoundException("No such a todo list with the given id"));
+
+        if(!todoList.getUser().equals(user)){
+            throw new TodoListNotFoundException();
+        }
+
         todoListRepository.deleteById(id);
 
     }
@@ -60,31 +70,18 @@ public class TodoListManager implements TodoListService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username).orElseThrow();
 
-        boolean isValidId = false;
+        TodoList todoList = todoListRepository.findById(updateTodoListRequest.getId()).orElseThrow(() -> new TodoListNotFoundException("No such a todo list with the given id"));
 
-        for (TodoList todoList:user.getTodoLists()) {
-
-            if(todoList.getId() == updateTodoListRequest.getId()){
-                isValidId = true;
-                break;
-            }
-
+        if(!todoList.getUser().equals(user)){
+            throw new TodoListNotFoundException();
         }
 
-        if(!isValidId){
-            throw new RuntimeException("Given todolist id does not belong to you.");
-        }
+        todoList = modelMapperService.forRequest().map(updateTodoListRequest,TodoList.class);
 
-        else{
+        todoList.setUser(user);
 
-            TodoList todoList = modelMapperService.forRequest().map(updateTodoListRequest,TodoList.class);
+        todoListRepository.save(todoList);
 
-            todoList.setUser(user);
-
-            todoListRepository.save(todoList);
-
-
-        }
 
     }
 
