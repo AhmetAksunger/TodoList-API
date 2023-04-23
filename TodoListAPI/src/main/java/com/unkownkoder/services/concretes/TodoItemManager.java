@@ -64,7 +64,7 @@ public class TodoItemManager implements TodoItemService {
 
         boolean isValidId = false;
 
-        for (TodoItem todoItem: todoItemRepository.findAllByTodoListIn(user.getTodoLists())) {
+        for (TodoItem todoItem: todoItemRepository.findAllByTodoListInOrderByTodoListName(user.getTodoLists())) {
 
             if(todoItem.getId() == id){
                 isValidId = true;
@@ -112,7 +112,7 @@ public class TodoItemManager implements TodoItemService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username).orElseThrow();
 
-        List<TodoItem> todoItems = todoItemRepository.findAllByTodoListIn(user.getTodoLists());
+        List<TodoItem> todoItems = todoItemRepository.findAllByTodoListInOrderByTodoListName(user.getTodoLists());
 
         List<GetUserTodoListAndItemsResponse> responses = todoItems.stream().map(todoItem->modelMapperService.forResponse().map(todoItem, GetUserTodoListAndItemsResponse.class)).collect(Collectors.toList());
 

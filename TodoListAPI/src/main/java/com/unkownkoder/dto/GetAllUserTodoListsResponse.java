@@ -7,18 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetUserTodoListAndItemsResponse {
-
-    private String TodoListName;
-
-    private int TodoListId;
-
+public class GetAllUserTodoListsResponse {
+    private int id;
     private String name;
-
-    private String description;
-
-    private Boolean completed;
-
-
 
 }

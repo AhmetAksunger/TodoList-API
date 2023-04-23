@@ -17,6 +17,8 @@ public class GetAllTodoListAndItemsResponse {
 
     String todoListName;
 
+    private int todoListId;
+
     String username;
 
 }

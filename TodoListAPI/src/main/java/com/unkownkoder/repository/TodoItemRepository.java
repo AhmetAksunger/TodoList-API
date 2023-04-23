@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TodoItemRepository extends JpaRepository<TodoItem,Integer> {
 
-    List<TodoItem> findAllByTodoListIn(List<TodoList> todoLists);
+    List<TodoItem> findAllByTodoListInOrderByTodoListName(List<TodoList> todoLists);
 
 
 }

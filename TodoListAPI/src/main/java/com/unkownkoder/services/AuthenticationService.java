@@ -46,22 +46,21 @@ public class AuthenticationService {
 
         authorities.add(userRole);
 
-        return userRepository.save(new User(0, username, encodedPassword, authorities));
+        return userRepository.save(new User(0, username, encodedPassword, authorities,true));
     }
 
-    public LoginResponseDTO loginUser(String username, String password){
-
-        try{
+    public LoginResponseDTO loginUser(String username, String password) throws RuntimeException {
+        try {
             Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
+                    new UsernamePasswordAuthenticationToken(username, password)
             );
 
             String token = tokenService.generateJwt(auth);
 
             return new LoginResponseDTO(token);
 
-        } catch(AuthenticationException e){
-            return new LoginResponseDTO("");
+        } catch (AuthenticationException e) {
+            throw new RuntimeException("Invalid username or password");
         }
     }
 

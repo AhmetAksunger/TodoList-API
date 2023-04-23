@@ -1,6 +1,7 @@
 package com.unkownkoder.services.concretes;
 
 import com.unkownkoder.dto.CreateTodoListRequest;
+import com.unkownkoder.dto.GetAllUserTodoListsResponse;
 import com.unkownkoder.dto.UpdateTodoListRequest;
 import com.unkownkoder.entity.TodoList;
 import com.unkownkoder.entity.User;
@@ -13,6 +14,9 @@ import com.unkownkoder.utils.mappers.ModelMapperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TodoListManager implements TodoListService {
@@ -82,5 +86,20 @@ public class TodoListManager implements TodoListService {
 
         }
 
+    }
+
+    @Override
+    public List<GetAllUserTodoListsResponse> getAllUserTodoLists() {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+
+        List<TodoList> todoLists = todoListRepository.findAllByUserUserId((user.getUserId()));
+
+        List<GetAllUserTodoListsResponse> responses = todoLists.stream()
+                .map(todoList -> modelMapperService.forResponse().map(todoList, GetAllUserTodoListsResponse.class))
+                .collect(Collectors.toList());
+
+        return responses;
     }
 }

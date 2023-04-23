@@ -92,4 +92,10 @@ public class UserController {
         return ResponseEntity.ok(todoItemService.getUserTodoListAndItems());
     }
 
+    @GetMapping("/get/todolists")
+    public ResponseEntity<List<GetAllUserTodoListsResponse>> getAllTodoList(){
+
+        return ResponseEntity.ok(todoListService.getAllUserTodoLists());
+    }
+
 }

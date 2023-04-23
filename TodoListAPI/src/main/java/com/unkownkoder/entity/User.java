@@ -23,6 +23,9 @@ public class User implements UserDetails{
 
     private String password;
 
+	@Column(name = "account_non_locked")
+	private boolean accountNonLocked = true;
+
     @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(
         name="user_role_junction",
@@ -40,7 +43,7 @@ public class User implements UserDetails{
 		authorities = new HashSet<>();
 	}
 
-	public User(int id, String username, String password, Set<Role> authorities){
+	public User(int id, String username, String password, Set<Role> authorities, boolean accountNonLocked){
 
 		this.username = username;
 		this.password = password;
@@ -77,6 +80,10 @@ public class User implements UserDetails{
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	public void setAccountNonLocked(boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
 	}
 
 	@Override
