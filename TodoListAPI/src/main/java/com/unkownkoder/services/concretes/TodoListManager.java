@@ -8,8 +8,8 @@ import com.unkownkoder.entity.User;
 import com.unkownkoder.repository.TodoItemRepository;
 import com.unkownkoder.repository.TodoListRepository;
 import com.unkownkoder.repository.UserRepository;
-import com.unkownkoder.services.UserService;
 import com.unkownkoder.services.abstracts.TodoListService;
+import com.unkownkoder.services.rules.TodoListRules;
 import com.unkownkoder.utils.exceptions.TodoListNotFoundException;
 import com.unkownkoder.utils.mappers.ModelMapperService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +33,18 @@ public class TodoListManager implements TodoListService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TodoListRules rules;
     @Override
     public void create(CreateTodoListRequest createTodoListRequest) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User user = userRepository.findByUsername(username).orElseThrow();
+
+        rules.isTodoListNameValid(createTodoListRequest.getName());
+        rules.checkIfTodoListNameWithUserIdExists(createTodoListRequest.getName(),user.getUserId());
 
         TodoList todoList = modelMapperService.forRequest().map(createTodoListRequest,TodoList.class);
 
@@ -69,6 +75,10 @@ public class TodoListManager implements TodoListService {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username).orElseThrow();
+
+
+        rules.isTodoListNameValid(updateTodoListRequest.getName());
+        rules.checkIfTodoListNameWithUserIdExists(updateTodoListRequest.getName(),user.getUserId());
 
         TodoList todoList = todoListRepository.findById(updateTodoListRequest.getId()).orElseThrow(() -> new TodoListNotFoundException("No such a todo list with the given id"));
 

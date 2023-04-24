@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.unkownkoder.entity.User;
 import com.unkownkoder.dto.LoginResponseDTO;
 import com.unkownkoder.dto.RegistrationDTO;
-import com.unkownkoder.services.AuthenticationService;
+import com.unkownkoder.services.concretes.AuthenticationService;
 
 @RestController
 @RequestMapping("/auth")

@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateTodoItemRequest {
 
-    @Min(value = 1)
+    @Min(value = 1, message = "Id should be greater than or equal to 1")
     private int id;
 
-    @NotNull(message = "name cannot be null")
-    @NotBlank(message = "name cannot be blank")
+    @NotNull(message = "Name cannot be null")
+    @NotBlank(message = "Name cannot be blank")
     private String name;
 
     private String description;

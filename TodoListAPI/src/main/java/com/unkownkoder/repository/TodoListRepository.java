@@ -9,4 +9,5 @@ public interface TodoListRepository extends JpaRepository<TodoList,Integer> {
 
     List<TodoList> findAllByUserUserId(int id);
 
+    boolean existsByNameAndUserUserId(String name, int userId);
 }

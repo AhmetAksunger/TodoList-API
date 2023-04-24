@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateTodoListRequest {
 
-    @Min(value = 1)
+    @Min(value = 1, message = "Id should be greater than or equal to 1")
     private int id;
 
     @NotBlank(message = "Name cannot be null")

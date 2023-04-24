@@ -11,5 +11,6 @@ public interface TodoItemRepository extends JpaRepository<TodoItem,Integer> {
 
     List<TodoItem> findAllByTodoListInOrderByTodoListName(List<TodoList> todoLists);
 
+    boolean existsByNameAndTodoListId(String name, int todoListId);
 
 }

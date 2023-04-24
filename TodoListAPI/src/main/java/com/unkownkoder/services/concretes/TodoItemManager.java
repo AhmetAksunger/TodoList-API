@@ -10,6 +10,7 @@ import com.unkownkoder.entity.User;
 import com.unkownkoder.repository.TodoItemRepository;
 import com.unkownkoder.repository.UserRepository;
 import com.unkownkoder.services.abstracts.TodoItemService;
+import com.unkownkoder.services.rules.TodoItemRules;
 import com.unkownkoder.utils.exceptions.TodoItemNotFoundException;
 import com.unkownkoder.utils.exceptions.TodoListNotFoundException;
 import com.unkownkoder.utils.mappers.ModelMapperService;
@@ -30,8 +31,15 @@ public class TodoItemManager implements TodoItemService {
     private UserRepository userRepository;
     @Autowired
     private ModelMapperService modelMapperService;
+
+    @Autowired
+    private TodoItemRules rules;
     @Override
     public void create(CreateTodoItemRequest createTodoItemRequest) {
+
+        rules.isTodoItemNameValid(createTodoItemRequest.getName());
+        rules.isTodoDescValid(createTodoItemRequest.getDescription());
+        rules.checkIfTodoItemNameExistsWithTodoListId(createTodoItemRequest.getName(),createTodoItemRequest.getTodoListId());
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 

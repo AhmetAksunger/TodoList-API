@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateUserRequest {
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "Username cannot be blank")
+    @NotNull(message = "Username cannot be null")
     private String username;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "Password cannot be blank")
+    @NotNull(message = "Password cannot be null")
     private String password;
 
     private boolean accountNonLocked;
