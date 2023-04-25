@@ -179,10 +179,12 @@ Content-Type: application/json
 Authorization: Bearer <token>
 ```
 #### Update TodoList
-```json
+```http
 POST /user/update/todolist
 Content-Type: application/json
 Authorization: Bearer <token>
+```
+```json
 {
 
     "id":"2",
@@ -378,5 +380,5 @@ Distributed under the MIT License. See [LICENSE](https://github.com/AhmetAksunge
 
 ## Acknowledgements
 
-Used his Authentication tutorial and system.
-* [Unknown Koder](https://github.com/unknownkoder/spring-security-login-system)
+* [Unknown Koder](https://github.com/unknownkoder/spring-security-login-system) - *Used his Authentication tutorial and system.*
+* [Shaan Khan](https://github.com/ShaanCoding/) - *Built ReadME Template*
