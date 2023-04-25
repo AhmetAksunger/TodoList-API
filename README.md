@@ -11,7 +11,6 @@
     <a href="https://github.com/AhmetAksunger/TodoList-API"><strong>Explore the docs »</strong></a>
     <br/>
     <br/>
-    <a href="https://github.com/AhmetAksunger/TodoList-API">View Demo</a>
     .
     <a href="https://github.com/AhmetAksunger/TodoList-API/issues">Report Bug</a>
     .
@@ -76,16 +75,25 @@ spring.datasource.password=12345
 spring.jpa.properties.javax.persistence.validation.mode = none
 ```
 Change "todo" to your database name
+
+
 ``
 spring.datasource.url=jdbc:postgresql://localhost:5432/todo
 `` 
+
+
 Fill the username and password fields based on your PostgreSQL application.
+
+
 ``
 spring.datasource.username=postgres
 spring.datasource.password=12345
 ``
 
+
 Also you can change the server port.
+
+
 ``
 server.port=8000
 ``
@@ -99,27 +107,29 @@ To use this API, you'll need to make requests to the various endpoints using a t
 Here are the examples of the types of requests you can make:
 
 #### User Registration
-```json
+```http
 POST /auth/register
 Content-Type: application/json
-
+```
+```json
 {
     "username": "johndoe",
     "password": "password123",
 }
 ```
 #### User Login
-```json
+```http
 POST /auth/login
 Content-Type: application/json
-
+```
+```json
 {
     "username": "johndoe",
     "password": "password123",
 }
 ```
 #### User Profile
-```json
+```http
 POST /user/profile
 Content-Type: application/json
 Authorization: Bearer <token>
@@ -137,10 +147,12 @@ Authorization: Bearer <token>
 }
 ```
 #### User Update
-```json
+```http
 POST /user/profile/update
 Content-Type: application/json
 Authorization: Bearer <token>
+```
+```json
 {
 
     "username":"johndoe",
@@ -150,16 +162,18 @@ Authorization: Bearer <token>
 }
 ```
 #### Create TodoList
-```json
+```http
 POST /user/create/todolist
 Content-Type: application/json
 Authorization: Bearer <token>
+```
+```json
 {
 "name": "John Doe's Yoga Practice Todo List"
 }
 ```
 #### Delete TodoList
-```json
+```http
 POST /user/delete/todolist/{id}
 Content-Type: application/json
 Authorization: Bearer <token>
@@ -177,10 +191,12 @@ Authorization: Bearer <token>
 }
 ```
 #### Create TodoItem
-```json
+```http
 POST /user/create/todoitem
 Content-Type: application/json
 Authorization: Bearer <token>
+```
+```json
 {
 "name": "Yoga class at 6 PM",
 "description": "Go to yoga class at 6pm at Mecidiyeköy",
@@ -189,10 +205,12 @@ Authorization: Bearer <token>
 }
 ```
 #### Update TodoItem
-```json
+```http
 POST /user/update/todoitem
 Content-Type: application/json
 Authorization: Bearer <token>
+```
+```json
 {
 
     "id":1,
@@ -203,13 +221,13 @@ Authorization: Bearer <token>
 }
 ```
 #### Delete TodoList
-```json
+```http
 POST /user/delete/todoitem/{id}
 Content-Type: application/json
 Authorization: Bearer <token>
 ```
 #### User Get TodoLists
-```json
+```http
 POST /user/get/todolists
 Content-Type: application/json
 Authorization: Bearer <token>
@@ -228,7 +246,7 @@ Authorization: Bearer <token>
 ]
 ```
 #### User Get TodoLists & Items
-```json
+```http
 POST /user/get/todolistsanditems
 Content-Type: application/json
 Authorization: Bearer <token>
@@ -260,7 +278,7 @@ Authorization: Bearer <token>
 ]
 ```
 #### Admin Get TodoLists & Items
-```json
+```http
 POST /admin/get/todolistsanditems
 Content-Type: application/json
 Authorization: Bearer <token>
